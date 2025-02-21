@@ -3,12 +3,11 @@ name: Checking Tests
 on:
   pull_request:
     branches:
-      - develop
-      - staging
+      - develop  
 
 jobs:
   test:
-    name: Checking Tests
+    name: Checking Cypress Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -22,10 +21,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-      
+
       - name: Build App
         run: npm run build
 
-      - name: Run vitest tests
-        run: npm run test
+      - name: Start App
+        run: npm run develop &  
 
+      - name: Wait for Server
+        run: npx wait-on http://localhost:3001 --timeout 60000 
+
+      - name: Run Cypress Tests
+        run: npm run test  
