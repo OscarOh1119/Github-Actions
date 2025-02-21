@@ -14,12 +14,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install Dependencies & Run Tests
-        run: |
-          npm install
-          npm run test
+      - name: Install Dependencies
+        run: npm install
 
-      - name: Deploy to Render
-        if: github.ref == 'refs/heads/main'
-        run: |
-          curl -X GET "${{ secrets.RENDER_DEPLOY_HOOK }}"
+      - name: Start Server & Client
+        run: npm run develop &  
+
+      - name: Wait for Server
+        run: npx wait-on http://localhost:3001
+
+      - name: Run Cypress Tests
+        run: npm run test
