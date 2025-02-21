@@ -15,7 +15,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install Dependencies and Build
-        run: npm render-build
+        run: npm run render-build
 
       - name: Start Server & Client
         run: npm run start:dev  
