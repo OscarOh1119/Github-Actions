@@ -22,6 +22,6 @@ jobs:
         # Only run this step if the branch is main
         if: github.ref == 'refs/heads/main'
         env:
-          deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
+          deploy_url: ${{ secrets.https://api.render.com/deploy/srv-cus41kin91rc73dhdul0?key=IrlcvHGxFao }}
         run: |
-          curl "$deploy_url"
+          curl "$https://github-actions-swws.onrender.com"
