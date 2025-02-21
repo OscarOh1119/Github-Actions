@@ -19,6 +19,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Install wait-on
+        run: npm install wait-on  
+
       - name: Build App for Deployment
         run: npm run render-build
 
@@ -26,7 +29,7 @@ jobs:
         run: npm run start:dev &  
 
       - name: Wait for Server to be ready
-        run: wait-on http://localhost:3001 --timeout 60000 
+        run: wait-on http://localhost:3001 --timeout 60000  
 
       - name: Run Cypress Tests
         run: npm run test  
