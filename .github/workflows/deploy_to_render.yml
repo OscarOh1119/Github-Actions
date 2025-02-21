@@ -1,39 +1,41 @@
 name: Deploy To Render
 
+
 on:
-  push:
-    branches: [main]
   pull_request:
+    branches:
+      - deploy
+      - main
+    types: 
+      - closed
+
+  push:
     branches:
       - main
 
+
 jobs:
   ci:
-    name: Deploy To Render
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4  
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Dependencies and Run Tests
+        run: |
+          npm install
+          npm run test-component
 
-      - name: Install wait-on
-        run: npm install wait-on  
+  deploy:
+    if: github.event.pull_request.merged == true  
+    runs-on: ubuntu-latest
 
-      - name: Build App for Deployment
-        run: npm run render-build
-
-      - name: Start Server & Client
-        run: npm run start:dev &  
-
-      - name: Wait for Server to be ready
-        run: wait-on http://localhost:3001 --timeout 60000  
-
-      - name: Run Cypress Tests
-        run: npm run test  
+    steps:
+      - uses: actions/checkout@v4 
 
       - name: Deploy to Render
+        env:
+          DEPLOY_URL: ${{ secrets.RENDER_DEPLOY_HOOK_URL }} 
         run: |
-          curl -X POST https://api.render.com/deploy/srv-cus41kin91rc73dhdul0?key=${{ secrets.RENDER_API_KEY }}  # Trigger deployment to Render
+          curl "$DEPLOY_URL"  # Trigger deployment to Render
+          echo "Deployed to Render"
